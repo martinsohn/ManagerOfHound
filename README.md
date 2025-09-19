@@ -1,6 +1,6 @@
 # ManagerOfHound
 
-Export Active Directory manager relationships to BloodHound via [OpenGraph](https://bloodhound.specterops.io/opengraph/overview).
+Export Active Directory manager relationships to [BloodHound](https://bloodhound.specterops.io) via [OpenGraph](https://bloodhound.specterops.io/opengraph/overview).
 
 ## Overview
 
@@ -19,7 +19,7 @@ Some organizations implement self-service portals where managers can control the
 
 ### Clone the repo
 ```powershell
-git clone https://github.com/yourusername/ManagerOfHound.git
+git clone https://github.com/martinsohn/ManagerOfHound.git
 cd ManagerOfHound
 ```
 
@@ -44,7 +44,7 @@ Invoke-ManagerOfHound
 
 ### Collect from Specific OU
 ```powershell
-Invoke-ManagerOfHound -SearchBase "OU=Sales,DC=contoso,DC=com"
+Invoke-ManagerOfHound -SearchBase "CN=Users,DC=north,DC=sevenkingdoms,DC=local"
 ```
 
 ## Output
@@ -63,7 +63,7 @@ RETURN p
 LIMIT 1000
 ```
 
-### Identify Tier Zero users with Managers
+### Find Tier Zero users with Managers
 ```cypher
 MATCH p=(:User)-[:ManagerOf]->(n:User)
 WHERE (n:Tag_Tier_Zero)
