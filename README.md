@@ -1,12 +1,8 @@
 # ManagerOfHound
 
-Export Active Directory manager relationships to [BloodHound](https://bloodhound.specterops.io) via [OpenGraph](https://bloodhound.specterops.io/opengraph/overview).
+ManagerOfHound is an [OpenGraph](https://bloodhound.specterops.io/opengraph/overview) extension for [BloodHound](https://bloodhound.specterops.io) that collect manager-subordinate relationships from Active Directory and exports them as custom "ManagerOf" edges for BloodHound ingestion.
 
-## Overview
-
-ManagerOfHound collects manager-subordinate relationships from Active Directory and exports them as custom "ManagerOf" edges for BloodHound ingestion.
-
-Some organizations implement self-service portals where managers can control the user accounts of their subordinates. This can create implicit privilege escalation paths not captured by default BloodHound edges. ManagerOfHound makes these hidden relationships visible through OpenGraph, enabling security teams to identify and assess novel attack paths in their environment.
+Some organizations implement self-service portals where managers can control the user accounts of their subordinates (e.g. password resets). This can create implicit privilege escalation paths not captured by the default BloodHound edges. ManagerOfHound makes these hidden relationships visible through OpenGraph, enabling security teams to identify and assess novel attack paths in their environment.
 
 ## Requirements
 
@@ -18,19 +14,22 @@ Some organizations implement self-service portals where managers can control the
 ## Usage
 
 ### Clone the repo
+
 ```powershell
 git clone https://github.com/martinsohn/ManagerOfHound.git
 cd ManagerOfHound
 ```
 
-### Set up demo with [GOAD lab](https://orange-cyberdefense.github.io/GOAD/)
-Demo output: [OpenGraph_ManagerOf_20250919110441.json](OpenGraph_ManagerOf_20250919110441.json)
+### (OPTIONAL) Create demo edges if running the [GOAD lab](https://orange-cyberdefense.github.io/GOAD/)
+
+Demo output from GOAD lab: [OpenGraph_ManagerOf_20250919110441.json](OpenGraph_ManagerOf_20250919110441.json)
 ```powershell
 . .\Set-GOTManagerHierarchy.ps1
 Set-GOTManagerHierarchy
 ```
 
-### Collect with default settings
+#### Collect with default settings
+
 ```powershell
 . .\ManagerOfHound.ps1
 
@@ -38,18 +37,19 @@ Set-GOTManagerHierarchy
 # - Searches entire domain (all OUs)
 # - Uses current domain controller
 # - Saves to current directory
-# - Output file: OpenGraph_ManagerOf.json
+# - Output file: OpenGraph_ManagerOf_[timestamp].json
 Invoke-ManagerOfHound
 ```
 
 ### Collect from Specific OU
+
 ```powershell
 Invoke-ManagerOfHound -SearchBase "CN=Users,DC=north,DC=sevenkingdoms,DC=local"
 ```
 
-## Output
+### Output
 
-Generates `OpenGraph_ManagerOf.json` containing:
+Generates `OpenGraph_ManagerOf_[timestamp].json` containing:
 - Manager-to-subordinate relationships as "ManagerOf" edges
 - Node identifiers using Active Directory SIDs
 - Metadata for OpenGraph context
@@ -70,10 +70,6 @@ WHERE (n:Tag_Tier_Zero)
 RETURN p
 LIMIT 1000
 ```
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
 ## License
 
