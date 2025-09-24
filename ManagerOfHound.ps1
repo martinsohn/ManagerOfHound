@@ -192,6 +192,3 @@
         }
     }
 }
-
-# Execute the function with verbose output
-Invoke-ManagerOfHound -Verbose
