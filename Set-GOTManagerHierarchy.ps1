@@ -119,6 +119,3 @@ Failed: $errorCount relationships
         TotalRelationships = $managerRelationships.Count
     }
 }
-
-# Execute the function
-Set-GOTManagerHierarchy
