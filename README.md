@@ -4,6 +4,12 @@ ManagerOfHound is an [OpenGraph](https://bloodhound.specterops.io/opengraph/over
 
 Some organizations implement self-service portals where managers can control the user accounts of their subordinates (e.g. password resets). This can create implicit privilege escalation paths not captured by the default BloodHound edges. ManagerOfHound makes these hidden relationships visible through OpenGraph, enabling security teams to identify and assess novel attack paths in their environment.
 
+Demonstration available in the [@SpecterOps #BloodHoundBasics post on X](https://x.com/SpecterOps/status/1969104194012406144)
+
+<p align="center">
+  <img width="800" alt="BloodHound's Explore page showing ManagerOf edges between User nodes" src="https://github.com/user-attachments/assets/3bb8447c-4620-4cf6-9d0e-e05bf2c0e129" />
+</p>
+
 ## Requirements
 
 - PowerShell 3.0+
