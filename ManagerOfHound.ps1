@@ -12,7 +12,8 @@
         Path where the JSON output file will be saved. Defaults to current directory.
     
     .PARAMETER FileName
-        Name of the output file. Defaults to 'OpenGraph_ManagerOf.json'.
+        Name of the output file. If not specified, defaults to 'OpenGraph_ManagerOf_[timestamp].json' 
+        where timestamp is in format yyyyMMddHHmmss.
     
     .PARAMETER SearchBase
         Distinguished Name of the OU to search. If not specified, searches entire domain.
@@ -46,7 +47,7 @@
         
         [Parameter()]
         [ValidatePattern('\.json$')]
-        [string]$FileName = "OpenGraph_ManagerOf.json",
+        [string]$FileName,
         
         [Parameter()]
         [string]$SearchBase,
@@ -65,6 +66,13 @@
         # Use current location if OutputPath not specified
         if (-not $OutputPath) {
             $OutputPath = (Get-Location).Path
+        }
+        
+        # Handle filename - add timestamp if using default name
+        if (-not $FileName) {
+            # Generate timestamp in format: yyyyMMddHHmmss
+            $timestamp = Get-Date -Format "yyyyMMddHHmmss"
+            $FileName = "OpenGraph_ManagerOf_$timestamp.json"
         }
         
         # Build output file path
