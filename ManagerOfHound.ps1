@@ -181,7 +181,7 @@
         }
         
         # Save JSON file
-        $finalJson | ConvertTo-Json -Depth 4 | Out-File -Encoding UTF8 $outputFile
+        $finalJson | ConvertTo-Json -Depth 4 -Compress | Out-File -Encoding UTF8 $outputFile
         
         Write-Host "Export complete: $outputFile"
         Write-Host "Processed $($edges.Count) edges"
