@@ -124,9 +124,23 @@
         
         Write-Verbose "Found $($results.Count) users with managers"
         
-        # Cache for manager lookups to avoid redundant queries
+        # Build manager cache from initial LDAP query. This prevents redundant LDAP queries for managers already in the result set
         $managerCache = @{}
         
+        foreach ($result in $results) {
+            try {
+                $dn = $result.Properties["distinguishedName"][0]
+                $sidBytes = $result.Properties["objectSid"][0]
+                $sid = (New-Object System.Security.Principal.SecurityIdentifier($sidBytes, 0)).Value
+                $managerCache[$dn] = $sid
+            } catch {
+                Write-Verbose "Error building cache for DN: $_"
+            }
+        }
+        
+        Write-Verbose "Built cache with $($managerCache.Count) entries"
+        
+        # Process relationships
         foreach ($result in $results) {
             try {
                 # Get user SID
@@ -136,17 +150,22 @@
                 # Get manager DN
                 $managerDN = $result.Properties["manager"][0]
                 
-                # Check cache first
+                # Check if manager is in our cache
                 if ($managerCache.ContainsKey($managerDN)) {
                     $managerSid = $managerCache[$managerDN]
-                } else {
-                    # Look up manager's SID
+                    Write-Verbose "Manager of $userSid found in cache: $managerDN"
+                }
+
+                # Perform LDAP lookup if needed
+                else {
+                    # Look up manager's SID (only for managers not in initial results)
                     $managerEntry = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$managerDN")
                     $managerSidBytes = $managerEntry.Properties["objectSid"].Value
                     
                     if ($managerSidBytes) {
                         $managerSid = (New-Object System.Security.Principal.SecurityIdentifier($managerSidBytes, 0)).Value
                         $managerCache[$managerDN] = $managerSid
+                        Write-Verbose "Manager of $userSid found via LDAP: $managerDN"
                     } else {
                         Write-Verbose "Could not get SID for manager: $managerDN"
                         $managerEntry.Dispose()
