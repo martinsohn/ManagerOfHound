@@ -29,8 +29,9 @@
         Exports all manager relationships to current directory
     
     .EXAMPLE
-        Invoke-ManagerOfHound -OutputPath "C:\Reports" -SearchBase "OU=Sales,DC=contoso,DC=com"
-        Exports manager relationships only from Sales OU to C:\Reports\OpenGraph_ManagerOf.json
+        Invoke-ManagerOfHound -OutputPath "C:\Output" -SearchBase "CN=Users,DC=north,DC=sevenkingdoms,DC=local"
+        Exports manager relationships from Users container to C:\Output
+    
     #>
     
     [CmdletBinding()]
